@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.javalec.spring_mybatis.dao.IDao">
+	<select id="listDao" resultType="com.javalec.spring_mybatis.dto.ContentDto">
+		SELECT * 
+		FROM BOARD 
+		ORDER BY BID DESC
+	</select>
+	
+	<select id="searchListDao" resultType="com.javalec.spring_mybatis.dto.ContentDto">
+	    
+	    SELECT *
+	    FROM BOARD
+	    <if test = "param1.equals('bName')">
+	    	WHERE BNAME = #{param2}
+	    </if>
+	   	<if test = "param1.equals('bTitle')">
+	   	   	WHERE BTITLE LIKE '%'||#{param2}||'%'
+	   	</if>
+	   	<if test = "param1.equals('bContent')">
+	   	   	WHERE BCONTENT LIKE '%'||#{param2}||'%'
+	   	</if>
+	</select>
+	
+	<insert id="boadrWriteDao">
+		INSERT INTO BOARD (BID, BNAME, BTITLE, BCONTENT, BHIT, BGROUP, BSTEP, BINDENT) VALUES 
+			(BOARD_SEQ.NEXTVAL, #{param1}, #{param2}, #{param3}, 0, BOARD_SEQ.currval, 0, 0)
+	</insert>
+	
+	<insert id="commentWriteDao">
+		INSERT INTO BOARD_COMMENT (CMID, BID, CMPASSWORD, CMNAME, CMCONTENT, CMGROUP, CMSTEP, CMINDENT) VALUES
+			(BOARD_COMMENT_SEQ.NEXTVAL, #{param1}, #{param2}, #{param3}, #{param4}, BOARD_COMMENT_SEQ.CURRVAL, 0, 0)
+	</insert>
+	
+	<insert id="commentReplyWriteDao">
+		INSERT INTO BOARD_COMMENT (CMID, BID, CMPASSWORD, CMNAME, CMCONTENT, CMGROUP, CMSTEP, CMINDENT) VALUES
+			(BOARD_COMMENT_SEQ.NEXTVAL, #{bId}, #{cmPassword}, #{cmName}, #{cmContent}, #{cmGroup}, #{cmStep}, #{cmIndent})
+	</insert>
+	
+	<!-- <insert id="fileDao" parameterType="com.javalec.spring_mybatis.dto.ContentFileDto">
+		INSERT INTO BOARD_FILE
+		(
+			FID,
+			BID,
+			ORIGINAL_FNAME,
+			STORED_FNAME,
+			FSIZE,
+		) 
+		VALUES 
+		(
+			BOARD_FILE_SEQ.NEXTVAL,
+			#{BID},
+			#{originalFname},
+			#{storedFname},
+			#{fSize}
+		)
+	</insert> -->
+	
+	
+	<select id="contentViewDao" resultType="com.javalec.spring_mybatis.dto.ContentDto">
+	    SELECT * 
+	  	FROM BOARD
+	    WHERE BID = #{param1,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="commentViewDao" resultType="com.javalec.spring_mybatis.dto.ContentDto">
+	    SELECT * 
+	  	FROM BOARD_comment
+	    WHERE BID = #{param1,jdbcType=VARCHAR}
+	    ORDER BY CMGROUP, CMSTEP desc
+	</select>
+	
+	 <update id="HitUp">
+	    UPDATE BOARD
+	    SET BHIT = BHIT + 1
+	    WHERE BID = #{param1}
+	</update>
+	
+	<delete id="deleteDao">
+		DELETE 
+		FROM BOARD 
+		WHERE BID = #{param1,jdbcType=VARCHAR}
+	</delete>
+	 
+	<update id="modifyDao" parameterType="com.javalec.spring_mybatis.dto.ContentDto">
+	    UPDATE BOARD
+	    SET BNAME = #{bName,jdbcType=VARCHAR}, BTITLE = #{bTitle,jdbcType=VARCHAR}, 
+	    		BCONTENT = #{bContent,jdbcType=VARCHAR}
+	    WHERE BID = #{bId,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="commentReplyUpdateDao" >
+	    UPDATE BOARD_comment
+	    SET cmstep = cmstep + 1
+	    WHERE cmGroup = #{param1}
+	    	AND cmstep >= #{param2}
+	</update>
+</mapper>
