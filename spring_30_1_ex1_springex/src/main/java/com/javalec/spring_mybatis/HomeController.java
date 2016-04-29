@@ -1,8 +1,10 @@
 package com.javalec.spring_mybatis;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,6 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.javalec.spring_mybatis.dao.IDao;
 import com.javalec.spring_mybatis.dto.CommentDto;
@@ -77,14 +82,28 @@ public class HomeController<HttpRequestWithModifiableParameters> {
 	}
 	
 	@RequestMapping("/write")
-	public String write(HttpServletRequest request)  {
-		//System.out.println(request.getS);
+	public String write(MultipartHttpServletRequest request)  {
+//		Map<String, MultipartFile> files = request.getFileMap();
+//		CommonsMultipartFile cmf = (CommonsMultipartFile) files.get("bFile");
+//		// 경로
+//		String path ="d:/upload/"+cmf.getOriginalFilename();
+//
+//		File file = new File(path);
+//		// 파일 업로드 처리 완료.
+//		
+//
+//		try {
+//			cmf.transferTo(file);
+//			System.out.println("success!");
+//		} catch (Exception e) {
+//			System.out.println("fall..");
+//		}
+		
 		IDao dao = sqlSession.getMapper(IDao.class);
 		dao.boardWriteDao(request.getParameter("bName")
 				, request.getParameter("bTitle")
 				, request.getParameter("bContent").replaceAll("\r\n", "<br/>"));
-		
-		//dao.fileDao(fileUtils.FileInfo(request));
+
 		return "redirect:list";
 	}
 	
