@@ -160,8 +160,9 @@ public class HomeController<HttpRequestWithModifiableParameters> {
 //		commentDto.setCmStep(commentDto.getCmStep()+1);
 		commentDto.setCmIndent(commentDto.getCmIndent()+20);
 		
-		System.out.println(commentDto.getbId());
+		System.out.println(commentDto.getCmId());
 		dao.commentReplyUpdateDao(commentDto.getCmGroup(), commentDto.getCmStep());
+		System.out.println(commentDto.getCmStep());
 		dao.commentReplyWriteDao(commentDto);
 		
 		return "redirect:content_view?bId="+request.getParameter("bId");
