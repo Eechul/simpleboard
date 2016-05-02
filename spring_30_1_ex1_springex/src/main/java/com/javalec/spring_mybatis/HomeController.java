@@ -161,7 +161,7 @@ public class HomeController<HttpRequestWithModifiableParameters> {
 		commentDto.setCmIndent(commentDto.getCmIndent()+20);
 		
 		System.out.println(commentDto.getCmId());
-		dao.commentReplyUpdateDao(commentDto.getCmGroup(), commentDto.getCmStep());
+		//dao.commentReplyUpdateDao(commentDto.getCmGroup(), commentDto.getCmStep());
 		System.out.println(commentDto.getCmStep());
 		dao.commentReplyWriteDao(commentDto);
 		

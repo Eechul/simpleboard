@@ -36,29 +36,20 @@
 	</insert>
 	
 	<insert id="commentReplyWriteDao">
-		INSERT INTO BOARD_COMMENT (CMID, BID, CMPASSWORD, CMNAME, CMCONTENT, CMGROUP, CMSTEP, CMINDENT) VALUES
-			(BOARD_COMMENT_SEQ.NEXTVAL, #{bId}, #{cmPassword}, #{cmName}, #{cmContent}, #{cmGroup}, #{cmStep}, #{cmIndent})
+	    <choose>
+		 	<when test = "cmStep == 0">
+		    	INSERT INTO BOARD_COMMENT (CMID, BID, CMPASSWORD, CMNAME, CMCONTENT, CMGROUP, CMSTEP, CMLEVEL,CMINDENT) VALUES
+				(BOARD_COMMENT_SEQ.NEXTVAL, #{bId}, #{cmPassword}, #{cmName}, #{cmContent}, #{cmGroup}, #{cmStep}, 0, #{cmIndent})
+		    </when>
+<!-- 		    여기서 부터 할것, LEVEL 칼럼 추가함. -->
+		 	<otherwise> 
+		 	    UPDATE BOARD_comment
+				SET cmstep = cmstep + 1
+				WHERE CMGROUP = #{param1}
+				AND CMSTEP > #{param2}
+		 	</otherwise>
+	    </choose>
 	</insert>
-	
-	<!-- <insert id="fileDao" parameterType="com.javalec.spring_mybatis.dto.ContentFileDto">
-		INSERT INTO BOARD_FILE
-		(
-			FID,
-			BID,
-			ORIGINAL_FNAME,
-			STORED_FNAME,
-			FSIZE,
-		) 
-		VALUES 
-		(
-			BOARD_FILE_SEQ.NEXTVAL,
-			#{BID},
-			#{originalFname},
-			#{storedFname},
-			#{fSize}
-		)
-	</insert> -->
-	
 	
 	<select id="contentViewDao" resultType="com.javalec.spring_mybatis.dto.ContentDto">
 	    SELECT * 
@@ -70,7 +61,7 @@
 	    SELECT * 
 	  	FROM BOARD_comment
 	    WHERE BID = #{param1,jdbcType=VARCHAR}
-	    ORDER BY CMGROUP, CMSTEP desc
+		ORDER BY CMGROUP, CMSTEP asc, cmid
 	</select>
 	
 	 <update id="HitUp">
@@ -93,9 +84,16 @@
 	</update>
 	
 	<update id="commentReplyUpdateDao" >
-	    UPDATE BOARD_comment
-	    SET cmstep = cmstep + 1
-	    WHERE cmGroup = #{param1}
-	    	AND cmstep >= #{param2}
+		<choose>
+		 	<when test = "param2 == 0">
+		    	WHERE BNAME = #{param2}
+		    </when>
+		 	<otherwise>
+		 	    UPDATE BOARD_comment
+				SET cmstep = cmstep + 1
+				WHERE CMGROUP = #{param1}
+				AND CMSTEP > #{param2}
+		 	</otherwise>
+	    </choose>
 	</update>
 </mapper>
