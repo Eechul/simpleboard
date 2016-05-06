@@ -156,14 +156,18 @@ public class HomeController<HttpRequestWithModifiableParameters> {
 		IDao dao = sqlSession.getMapper(IDao.class);
 		System.out.println("cmId :"+request.getParameter("cmId"));
 		
-		commentDto.setCmContent(commentDto.getCmContent().replaceAll("\r\n", "<br/>"));
+		// sql을 길게 쓰는것이 성능차원에서 이익이라고 생각.
+		// db를 여러번 들르면 그만큼 느려진다는 것이 내 판단
+		// 0일때과 0이 아닐때를 if문으로 구분해서 하기
+		// update 와 insert를 같이쓰는 merge를 써보기
+		//commentDto.setCmContent(commentDto.getCmContent().replaceAll("\r\n", "<br/>"));
 //		commentDto.setCmStep(commentDto.getCmStep()+1);
-		commentDto.setCmIndent(commentDto.getCmIndent()+20);
+		//commentDto.setCmIndent(commentDto.getCmIndent()+20);
 		
-		System.out.println(commentDto.getCmId());
+		//System.out.println(commentDto.getCmId());
 		//dao.commentReplyUpdateDao(commentDto.getCmGroup(), commentDto.getCmStep());
-		System.out.println(commentDto.getCmStep());
-		dao.commentReplyWriteDao(commentDto);
+		//System.out.println(commentDto.getCmStep());
+		//dao.commentReplyWriteDao(commentDto);
 		
 		return "redirect:content_view?bId="+request.getParameter("bId");
 	}
