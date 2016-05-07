@@ -37,17 +37,24 @@
 	
 	<insert id="commentReplyWriteDao">
 	    <choose>
-		 	<when test = "cmStep == 0">
-		    	INSERT INTO BOARD_COMMENT (CMID, BID, CMPASSWORD, CMNAME, CMCONTENT, CMGROUP, CMSTEP, CMINDENT) VALUES
-				(BOARD_COMMENT_SEQ.NEXTVAL, #{bId}, #{cmPassword}, #{cmName}, #{cmContent}, #{cmGroup}, #{cmStep}, 0, #{cmIndent})
-		    </when>
-<!-- 		    여기서 부터 할것, LEVEL 칼럼 추가함. -->
-		 	<otherwise> 
-		 	    UPDATE BOARD_comment
-				SET cmstep = cmstep + 1
-				WHERE CMGROUP = #{param1}
-				AND CMSTEP > #{param2}
-		 	</otherwise>
+	        <when test = "cmStep != 0">
+			    INSERT INTO board_comment 
+			    (CMID, BID, CMPASSWORD, CMNAME, CMCONTENT, CMGROUP, CMSTEP, CMINDENT) VALUES 
+			    (BOARD_COMMENT_SEQ.NEXTVAL, #{bId}, #{cmPassword}, #{cmName}, #{cmContent}, #{cmGroup}, 
+				      #{cmStep}, #{cmIndent}+20)
+	    	</when>
+	    	<otherwise> 
+	    	    INSERT INTO board_comment 
+			    (CMID, BID, CMPASSWORD, CMNAME, CMCONTENT, CMGROUP, CMSTEP, CMINDENT) VALUES 
+				(
+				    BOARD_COMMENT_SEQ.NEXTVAL, #{bId}, #{cmPassword}, #{cmName}, #{cmContent}, #{cmGroup}, 
+				    (
+				      SELECT NVL(MAX(CMSTEP),0) + 1 
+				      FROM board_comment 
+				      WHERE  cmgroup = #{cmGroup}
+				    ), #{cmIndent}+20
+				)
+	    	</otherwise>
 	    </choose>
 	</insert>
 	
@@ -83,17 +90,17 @@
 	    WHERE BID = #{bId,jdbcType=VARCHAR}
 	</update>
 	
-	<update id="commentReplyUpdateDao" >
-		<choose>
-		 	<when test = "param2 == 0">
-		    	WHERE BNAME = #{param2}
-		    </when>
-		 	<otherwise>
-		 	    UPDATE BOARD_comment
-				SET cmstep = cmstep + 1
-				WHERE CMGROUP = #{param1}
-				AND CMSTEP > #{param2}
-		 	</otherwise>
-	    </choose>
+	<select id="commentReplyFlagDao" resultType="java.lang.Integer">
+		SELECT NVL(MIN(CMSTEP),0) 
+        FROM BOARD_COMMENT
+        WHERE cmgroup = #{param1}
+        	AND CMSTEP > #{param2}
+        	AND cmindent <![CDATA[<]]>= #{param3}
+	</select>
+	
+	<update id="commentReplyUpdateDao">
+	    UPDATE BOARD_COMMENT
+	    SET CMSTEP = #{cmStep}+1
+	    WHERE CMGROUP = #{cmGroup} AND CMSTEP >= #{cmStep}
 	</update>
 </mapper>

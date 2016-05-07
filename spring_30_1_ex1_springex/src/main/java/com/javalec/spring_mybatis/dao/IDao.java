@@ -27,5 +27,7 @@ public interface IDao {
 	
 	public void commentReplyWriteDao(CommentDto commentDto);
 
-	public void commentReplyUpdateDao(int cmGroup, int cmStep);
+	public void commentReplyUpdateDao(CommentDto commentDto);
+	
+	public int commentReplyFlagDao(int cmGroup, int cmStep, int cmIntent);
 }

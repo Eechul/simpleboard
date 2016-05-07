@@ -12,16 +12,8 @@ public class CommentDto {
 	private Timestamp cmDate;
 	private int cmGroup;
 	private int cmStep;
-	private int cmLevel;
 	private	int cmIndent;
 	
-	public int getCmLevel() {
-		return cmLevel;
-	}
-
-	public void setCmLevel(int cmLevel) {
-		this.cmLevel = cmLevel;
-	}
 
 	public CommentDto() {
 		/*System.out.println(cmId);

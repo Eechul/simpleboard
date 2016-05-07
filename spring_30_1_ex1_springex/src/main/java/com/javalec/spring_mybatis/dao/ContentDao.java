@@ -93,11 +93,15 @@ public class ContentDao implements IDao{
 
 
 	@Override
-	public void commentReplyUpdateDao(int cmGroup, int cmStep) {
-		// TODO Auto-generated method stub
+	public void commentReplyUpdateDao(CommentDto commentDto) {
 		
 	}
 
+	@Override
+	public int commentReplyFlagDao(int cmGroup, int cmStep, int cmIntent) {
+		return 0;
+		
+	}
 
 
 

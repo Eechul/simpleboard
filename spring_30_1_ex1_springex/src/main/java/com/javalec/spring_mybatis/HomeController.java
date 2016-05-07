@@ -156,20 +156,26 @@ public class HomeController<HttpRequestWithModifiableParameters> {
 		IDao dao = sqlSession.getMapper(IDao.class);
 		System.out.println("cmId :"+request.getParameter("cmId"));
 		
-		// sql을 길게 쓰는것이 성능차원에서 이익이라고 생각.
-		// db를 여러번 들르면 그만큼 느려진다는 것이 내 판단
-		// 0일때과 0이 아닐때를 if문으로 구분해서 하기
-		// update 와 insert를 같이쓰는 merge를 써보기
-		//commentDto.setCmContent(commentDto.getCmContent().replaceAll("\r\n", "<br/>"));
-//		commentDto.setCmStep(commentDto.getCmStep()+1);
-		//commentDto.setCmIndent(commentDto.getCmIndent()+20);
 		
-		//System.out.println(commentDto.getCmId());
-		//dao.commentReplyUpdateDao(commentDto.getCmGroup(), commentDto.getCmStep());
-		//System.out.println(commentDto.getCmStep());
-		//dao.commentReplyWriteDao(commentDto);
-		
+		int flag = dao.commentReplyFlagDao(commentDto.getCmGroup(), commentDto.getCmStep(), commentDto.getCmIndent());
+		// select 쿼리에서 값을(flag) 가져온다 이값은 step 값
+		commentDto.setCmStep(flag); // 셋 해주고
+		if(flag != 0)	// 크게 step이 0일때와 0이 아닐때로 구분이된다. 
+		{
+			dao.commentReplyUpdateDao(commentDto);
+			dao.commentReplyWriteDao(commentDto);
+			// 0이 아니라면 업데이트를 해주고 글을 쓰게되고
+		}
+		else
+		{
+			System.out.println(commentDto.getCmIndent());
+			dao.commentReplyWriteDao(commentDto);
+			// 0이 라면 그냥 글을 쓰게된다.(여기선 안보이지만 2개이상의 쿼리를 쓴 것이다.
+			// 위에 0이 아닐때에서 update문을 한 뒤 insert를 할 수 있는 쿼리가 없을까
+			// 찾아보다가 결국엔 따로 쓴 소스들이라고 할 수 있다.)
+		}
 		return "redirect:content_view?bId="+request.getParameter("bId");
+		// 원래 게시판 페이지로 이동.
 	}
 	
 }
