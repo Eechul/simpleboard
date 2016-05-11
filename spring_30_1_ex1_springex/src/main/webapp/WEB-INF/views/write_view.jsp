@@ -21,9 +21,9 @@
 			<tr>
 				<td colspan="2"> <textarea name="bContent" rows="10" cols="40"></textarea> </td>
 			</tr>
-			<!-- <tr>
+			<tr>
 				<td colspan="2"><input type="file" name="bFile"><br><td>
-			</tr> -->
+			</tr> 
 			<tr>
 				<td colspan="2"> <input type="submit" value="입력"> &nbsp;&nbsp; <a href="list">목록보기</a></td>
 			</tr>

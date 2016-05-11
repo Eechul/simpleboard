@@ -26,8 +26,8 @@
 	</select>
 	
 	<insert id="boardWriteDao">
-		INSERT INTO BOARD (BID, BNAME, BTITLE, BCONTENT, BHIT, BGROUP, BSTEP, BINDENT) VALUES 
-			(BOARD_SEQ.NEXTVAL, #{param1}, #{param2}, #{param3}, 0, BOARD_SEQ.CURRVAL, 0, 0)
+		INSERT INTO BOARD (BID, BNAME, BTITLE, BCONTENT, BHIT) VALUES 
+			(BOARD_SEQ.NEXTVAL, #{param1}, #{param2}, #{param3}, 0)
 	</insert>
 	
 	<insert id="commentWriteDao">
