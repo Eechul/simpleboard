@@ -88,50 +88,64 @@ public class HomeController<HttpRequestWithModifiableParameters> {
 
 	@RequestMapping("/write")
 	public String write(MultipartHttpServletRequest request) {
-
+		int bId;
 		Map<String, MultipartFile> files = request.getFileMap();
 		
 		IDao dao = sqlSession.getMapper(IDao.class);
-		dao.boardWriteDao(request.getParameter("bName"), request
+		bId = dao.boardWriteDao(request.getParameter("bName"), request
 				.getParameter("bTitle"), request.getParameter("bContent")
 				.replaceAll("\r\n", "<br/>"));
-		// 게시글을 insert 한 후의 키값을 fileinfo 테이블에 insert해야하기 때문에 r
+		System.out.println(bId);
+		// 게시글을 insert 한 후의 키값을 fileinfo 테이블에 insert해야하기 때문에 
 		// 게시글 insert를 먼저 수행.
-	
-		CommonsMultipartFile cmf = (CommonsMultipartFile) files.get("bFile");
-
-		String originalFileName = cmf.getOriginalFilename();
-		String originalFileExtension = cmf.getOriginalFilename().substring(
-				originalFileName.lastIndexOf("."));
-		String storedFileName = CommonUtils.getRandomString()
-				+ originalFileExtension;
-		int fileSize = (int) cmf.getSize(); 
+		//CommonsMultipartFile cmf = (CommonsMultipartFile) files.get("bFile");
 		
-		// information values
-		System.out.println("원래 파일이름" + originalFileName);
-		System.out.println("확장자:" + originalFileExtension);
-		System.out.println("저장될 이름:" + storedFileName);
-		System.out.println("fsize:" + fileSize);
-		
-		FileInfoDto finfoDto = new FileInfoDto();
-		
-		finfoDto.setfOriginal_Name(originalFileName); 
-		finfoDto.setfStored_Name(storedFileName);
-		finfoDto.setfSize(fileSize);
-		
-		// 경로
-		String path = "d:/upload/" + storedFileName;
-
-		
-		File file = new File(path);
-		// 파일 업로드 처리 완료.
-
-		try {
-			cmf.transferTo(file);
-			System.out.println("success!");
-		} catch (Exception e) {
-			System.out.println("fall..");
-		}
+//		// 오리지널 파일이름
+//		String originalFileName = cmf.getOriginalFilename();
+//		// 파일의 확장자 (.xx)
+//		String originalFileExtension = cmf.getOriginalFilename().substring(
+//				originalFileName.lastIndexOf("."));
+//		// 저장될 파일이름 문자+숫자 = 무작위 문자열 로 구성
+//		String storedFileName = CommonUtils.getRandomString()
+//				+ originalFileExtension;
+//		// 파일 크기
+//		int fileSize = (int) cmf.getSize(); 
+//		
+//		System.out.println("원래 파일이름" + originalFileName);
+//		System.out.println("확장자:" + originalFileExtension);
+//		System.out.println("저장될 이름:" + storedFileName);
+//		System.out.println("fsize:" + fileSize);
+//
+//		FileInfoDto finfoDto = new FileInfoDto();
+//		// 파일 정보 값 set 
+//		
+//		finfoDto.setfOriginal_Name(originalFileName); 
+//		finfoDto.setfStored_Name(storedFileName);
+//		finfoDto.setfSize(fileSize);
+//		
+//		// 트랜잭션 단위로 처리할때 오류날수 있음! 
+//		// 이유 : (시나리오) A라는 사람이 게시판에 글 작성과 파일업로드를 함.
+//		// A라는 사람과 동시에 B라는 사람이 게시판에 글 작성과 파일 업로드를 함.
+//		// A 가 현재 게시판 시퀀스(BOARD_SEQ)를 FILEINFO 테이블에 삽입하려 할때
+//		// B 가 그전에 게시판을 작성하여 시퀀스가 카운터 된 상황.
+//		// 그럼 A는 FILEINFO테이블의 BID가 BOARD테이블 BID와 다른 상황 발생.
+//		// 치명적 오류!
+//		
+//		dao.insertFileInfoDao(finfoDto);
+//		
+//		// 경로
+//		String path = "d:/upload/" + storedFileName;
+//
+//		
+//		File file = new File(path);
+//		// 파일 업로드 처리 완료.
+//
+//		try {
+//			cmf.transferTo(file);
+//			System.out.println("success!");
+//		} catch (Exception e) {
+//			System.out.println("fall..");
+//		}
 		return "redirect:list";
 	}
 

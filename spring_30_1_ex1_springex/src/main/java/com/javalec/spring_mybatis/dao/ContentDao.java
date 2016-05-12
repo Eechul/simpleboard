@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.javalec.spring_mybatis.dto.CommentDto;
 import com.javalec.spring_mybatis.dto.ContentDto;
-import com.javalec.spring_mybatis.dto.ContentFileDto;
+import com.javalec.spring_mybatis.dto.FileInfoDto;
 
 public class ContentDao implements IDao{
 
@@ -30,8 +30,9 @@ public class ContentDao implements IDao{
 	
 	
 	@Override
-	public void boardWriteDao(String bName, String bTitle, String bContent) {
+	public int boardWriteDao(String bName, String bTitle, String bContent) {
 		System.out.println("writeDao()");
+		return 0;
 		
 	}
 
@@ -67,7 +68,7 @@ public class ContentDao implements IDao{
 	}
 
 	@Override
-	public void fileDao(ContentFileDto contentFileDto) {
+	public void insertFileInfoDao(FileInfoDto FileInfoDto) {
 		// TODO Auto-generated method stub
 		
 	}
