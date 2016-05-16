@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class CommentDto {
 
 	private String cmId;
-	private String bId;
+	private int bId;
 	private String cmPassword;
 	private String cmName;
 	private String cmContent;
@@ -35,11 +35,11 @@ public class CommentDto {
 		this.cmId = cmId;
 	}
 
-	public String getbId() {
+	public int getbId() {
 		return bId;
 	}
 
-	public void setbId(String bId) {
+	public void setbId(int bId) {
 		this.bId = bId;
 	}
 

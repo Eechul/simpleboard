@@ -11,7 +11,7 @@ public interface IDao {
 	public ArrayList<ContentDto> listDao();
 	public ArrayList<ContentDto> searchListDao(String searchType, String searchStr);
 	
-	public int boardWriteDao(String bName, String bTitle, String bContent);
+	public int boardWriteDao(ContentDto contentDto);
 	public void commentWriteDao(String bId, String cmPassword, String cmName, String cmContent);
 	
 	public void insertFileInfoDao(FileInfoDto fileInfoDto);

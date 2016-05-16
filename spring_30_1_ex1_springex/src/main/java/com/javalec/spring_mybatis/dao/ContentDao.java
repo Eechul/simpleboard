@@ -30,7 +30,7 @@ public class ContentDao implements IDao{
 	
 	
 	@Override
-	public int boardWriteDao(String bName, String bTitle, String bContent) {
+	public int boardWriteDao(ContentDto contentDto) {
 		System.out.println("writeDao()");
 		return 0;
 		

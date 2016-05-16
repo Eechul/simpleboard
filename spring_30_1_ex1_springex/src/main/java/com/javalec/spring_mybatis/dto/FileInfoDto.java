@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class FileInfoDto {
 
 	private String fNum;
-	private String bId;
+	private int bId;
 	private String fOriginal_Name;
 	private String fStored_Name;
 	private int fSize;
@@ -28,13 +28,13 @@ public class FileInfoDto {
 
 
 
-	public String getbId() {
+	public int getbId() {
 		return bId;
 	}
 
 
 
-	public void setbId(String bId) {
+	public void setbId(int bId) {
 		this.bId = bId;
 	}
 
