@@ -86,6 +86,7 @@ public class HomeController<HttpRequestWithModifiableParameters> {
 		return "/write_view";
 	}
 
+	// 글쓰기 + 파일 업로드 -> 파일업로드 객체화 시키기
 	@RequestMapping("/write")
 	public String write(ContentDto contentDto, MultipartHttpServletRequest request) {
 		Map<String, MultipartFile> files = request.getFileMap();
@@ -152,7 +153,8 @@ public class HomeController<HttpRequestWithModifiableParameters> {
 		}
 		return "redirect:list";
 	}
-
+	
+	
 	@RequestMapping("/comment_write")
 	public String comment_write(HttpServletRequest request, Model model) {
 		IDao dao = sqlSession.getMapper(IDao.class);
@@ -173,7 +175,11 @@ public class HomeController<HttpRequestWithModifiableParameters> {
 				dao.contentViewDao(request.getParameter("bId")));
 		model.addAttribute("comment_view",
 				dao.commentViewDao(request.getParameter("bId")));
+		
+		// 첨부파일 관련 코드 작성
+		//model.addAttribuye(...)
 
+		
 		return "/content_view";
 	}
 

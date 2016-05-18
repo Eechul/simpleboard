@@ -49,6 +49,10 @@
 			<tr>
 				<td colspan="2"> <input type="submit" value="수정"> &nbsp;&nbsp; <a href="list">목록보기</a> &nbsp;&nbsp; <a href="delete?bId=${content_view.bId}">삭제</a></td>
 			</tr>
+			<tr>
+				<td> 파일 다운로드 </td>
+				<td> <a href="download_file">test </a> </td>
+			</tr>
 		</form>
 	</table>
 	
